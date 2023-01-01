@@ -1,21 +1,40 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from "vue-router";
+import Footer from "@/components/Footer/Footer.vue";
+import Header from "@/components/Header/Header.vue";
 </script>
 
 <template>
-  <header>
-   
-
-    <div class="wrapper">
-  
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-      </nav>
+  <div class="app flex flex-column h-screen">
+    <Header />
+    <main class="flex-grow-1 relative content-holder">
+      <RouterView />
+    </main>
+    <div class="flex-grow-none">
+      <Footer />
     </div>
-  </header>
-
-  <RouterView />
+  </div>
 </template>
 
-<style scoped>
+<style lang="scss">
+.content-holder::before {
+  content: "";
+  top: 0;
+  left: 0;
+  position: absolute;
+  background-image: url("@/assets/images/darth-vader.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center 100%;
+  opacity: 0.1;
+  height: 100%;
+  width: 100%;
+}
+.brand-holder {
+  svg {
+    height: 100%;
+    fill: var(--surface-900);
+    stroke: var(--yellow-500);
+  }
+}
 </style>
