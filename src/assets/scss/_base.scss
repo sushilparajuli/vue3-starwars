@@ -17,7 +17,7 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: radial-gradient(circle at 24.1% 68.8%, rgb(50, 50, 50) 0%, rgb(0, 0, 0) 99.4%);
+  background: linear-gradient(rgb(27, 27, 27) 0%, rgb(26, 25, 25) 30.4%);
 }
 
 @property --offset {

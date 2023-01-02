@@ -8,7 +8,11 @@ import Header from "@/components/AppHeader.vue";
   <div class="app flex flex-column h-screen">
     <Header />
     <main class="flex-grow-1 relative content-holder">
-      <RouterView />
+      <router-view v-slot="{ Component }">
+        <transition name="grow-in" mode="out-in">
+          <Component :is="Component" />
+        </transition>
+      </router-view>
     </main>
     <div class="flex-grow-none">
       <Footer />
@@ -36,5 +40,15 @@ import Header from "@/components/AppHeader.vue";
     fill: var(--surface-900);
     stroke: var(--yellow-500);
   }
+}
+
+.grow-in-enter-from,
+.grow-in-leave-to {
+  opacity: 0;
+  transform: scale(0.3);
+}
+.grow-in-enter-active,
+.grow-in-leave-active {
+  transition: 0.3s ease-out;
 }
 </style>

@@ -146,209 +146,213 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <div class="container pt-4">
-    <h1 class="text-white uppercase mb-2">{{ title }}s</h1>
-    <DataTable
-      :value="peopleStore.people"
-      :lazy="true"
-      :paginator="true"
-      :rows="10"
-      ref="dt"
-      dataKey="created"
-      :totalRecords="peopleStore.totalRecord"
-      :loading="peopleStore.loading"
-      @page="onPage($event)"
-      @sort="onSort($event)"
-      :globalFilterFields="filterKeys"
-      responsiveLayout="scroll"
-    >
-      <Column
-        field="name"
-        header="Name"
-        filterField="name"
-        filterMatchMode="startsWith"
-        ref="name"
-        :sortable="true"
-      >
-      </Column>
-      <Column
-        field="eye_color"
-        header="Eye Color"
-        filterField="eye_color"
-        filterMatchMode="contains"
-        ref="eye_color"
-        :sortable="true"
-      >
-      </Column>
-      <Column
-        field="gender"
-        header="Gender"
-        filterMatchMode="contains"
-        ref="gender"
-        :sortable="true"
-      >
-      </Column>
-      <Column
-        field="skin_color"
-        header="Skin Color"
-        filterField="skin_color"
-        ref="skin_color"
-        :sortable="true"
-      >
-      </Column>
-      <Column header="Actions" :exportable="false" style="min-width: 8rem">
-        <template #body="slotProps">
-          <Button
-            icon="pi pi-pencil"
-            class="p-button-rounded p-button-success mr-2"
-            @click="editProduct(slotProps.data)"
-          />
-          <Button
-            icon="pi pi-trash"
-            class="p-button-rounded p-button-warning"
-            @click="confirmDeleteProduct(slotProps.data)"
-          />
-        </template>
-      </Column>
-    </DataTable>
-  </div>
-
-  <!-- Edit Dialog -->
-  <Dialog
-    v-model:visible="itemDialog"
-    :style="{ width: '450px' }"
-    header="Character Details"
-    :modal="true"
-    class="p-fluid"
+  <div
+    class="relative px-5 flex flex-column h-full container align-items-center"
   >
-    <div class="field">
-      <label for="name">Name</label>
-      <InputText
-        id="name"
-        v-model.trim="item.name"
-        required="true"
-        autofocus
-        :class="{ 'p-invalid': submitted && !item.name }"
-      />
-      <small class="p-error" v-if="submitted && !item.name"
-        >Name is required.</small
+    <div class="container pt-4">
+      <h1 class="text-white uppercase mb-2">{{ title }}s</h1>
+      <DataTable
+        :value="peopleStore.people"
+        :lazy="true"
+        :paginator="true"
+        :rows="10"
+        ref="dt"
+        dataKey="created"
+        :totalRecords="peopleStore.totalRecord"
+        :loading="peopleStore.loading"
+        @page="onPage($event)"
+        @sort="onSort($event)"
+        :globalFilterFields="filterKeys"
+        responsiveLayout="scroll"
       >
+        <Column
+          field="name"
+          header="Name"
+          filterField="name"
+          filterMatchMode="startsWith"
+          ref="name"
+          :sortable="true"
+        >
+        </Column>
+        <Column
+          field="eye_color"
+          header="Eye Color"
+          filterField="eye_color"
+          filterMatchMode="contains"
+          ref="eye_color"
+          :sortable="true"
+        >
+        </Column>
+        <Column
+          field="gender"
+          header="Gender"
+          filterMatchMode="contains"
+          ref="gender"
+          :sortable="true"
+        >
+        </Column>
+        <Column
+          field="skin_color"
+          header="Skin Color"
+          filterField="skin_color"
+          ref="skin_color"
+          :sortable="true"
+        >
+        </Column>
+        <Column header="Actions" :exportable="false" style="min-width: 8rem">
+          <template #body="slotProps">
+            <Button
+              icon="pi pi-pencil"
+              class="p-button-rounded p-button-success mr-2"
+              @click="editProduct(slotProps.data)"
+            />
+            <Button
+              icon="pi pi-trash"
+              class="p-button-rounded p-button-warning"
+              @click="confirmDeleteProduct(slotProps.data)"
+            />
+          </template>
+        </Column>
+      </DataTable>
     </div>
 
-    <div class="field">
-      <label for="inventoryStatus" class="mb-3">Gender</label>
-      <Dropdown
-        id="inventoryStatus"
-        v-model="item.gender"
-        :options="genderList"
-        optionLabel="label"
-        placeholder="Select a Gender"
-      >
-        <template #value="slotProps">
-          <div v-if="slotProps.value && slotProps.value.value">
-            <span :class="'product-badge status-' + slotProps.value.value">{{
-              slotProps.value.label
-            }}</span>
-          </div>
-          <div v-else-if="slotProps.value && !slotProps.value.value">
-            <span
-              :class="'product-badge status-' + slotProps.value.toLowerCase()"
-              >{{ slotProps.value }}</span
-            >
-          </div>
-          <span v-else>
-            {{ slotProps.placeholder }}
-          </span>
-        </template>
-      </Dropdown>
-    </div>
+    <!-- Edit Dialog -->
+    <Dialog
+      v-model:visible="itemDialog"
+      :style="{ width: '450px' }"
+      header="Character Details"
+      :modal="true"
+      class="p-fluid"
+    >
+      <div class="field">
+        <label for="name">Name</label>
+        <InputText
+          id="name"
+          v-model.trim="item.name"
+          required="true"
+          autofocus
+          :class="{ 'p-invalid': submitted && !item.name }"
+        />
+        <small class="p-error" v-if="submitted && !item.name"
+          >Name is required.</small
+        >
+      </div>
 
-    <div class="field">
-      <label class="mb-3">Eye Color</label>
-      <div class="formgrid grid">
-        <div class="field-radiobutton col-6">
-          <RadioButton
-            id="eyeColor1"
-            name="eye_color"
-            value="blue"
-            v-model="item.eye_color"
-          />
-          <label for="category1">Blue</label>
-        </div>
-        <div class="field-radiobutton col-6">
-          <RadioButton
-            id="eyeColor2"
-            name="eye_color"
-            value="brown"
-            v-model="item.eye_color"
-          />
-          <label for="category2">Brown</label>
-        </div>
-        <div class="field-radiobutton col-6">
-          <RadioButton
-            id="eyeColor3"
-            name="eye_color"
-            value="blonde"
-            v-model="item.eye_color"
-          />
-          <label for="category3">Blonde</label>
-        </div>
-        <div class="field-radiobutton col-6">
-          <RadioButton
-            id="eyeColor4"
-            name="eye_color"
-            value="unknown"
-            v-model="item.eye_color"
-          />
-          <label for="category4">Unknown</label>
+      <div class="field">
+        <label for="inventoryStatus" class="mb-3">Gender</label>
+        <Dropdown
+          id="inventoryStatus"
+          v-model="item.gender"
+          :options="genderList"
+          optionLabel="label"
+          placeholder="Select a Gender"
+        >
+          <template #value="slotProps">
+            <div v-if="slotProps.value && slotProps.value.value">
+              <span :class="'product-badge status-' + slotProps.value.value">{{
+                slotProps.value.label
+              }}</span>
+            </div>
+            <div v-else-if="slotProps.value && !slotProps.value.value">
+              <span
+                :class="'product-badge status-' + slotProps.value.toLowerCase()"
+                >{{ slotProps.value }}</span
+              >
+            </div>
+            <span v-else>
+              {{ slotProps.placeholder }}
+            </span>
+          </template>
+        </Dropdown>
+      </div>
+
+      <div class="field">
+        <label class="mb-3">Eye Color</label>
+        <div class="formgrid grid">
+          <div class="field-radiobutton col-6">
+            <RadioButton
+              id="eyeColor1"
+              name="eye_color"
+              value="blue"
+              v-model="item.eye_color"
+            />
+            <label for="category1">Blue</label>
+          </div>
+          <div class="field-radiobutton col-6">
+            <RadioButton
+              id="eyeColor2"
+              name="eye_color"
+              value="brown"
+              v-model="item.eye_color"
+            />
+            <label for="category2">Brown</label>
+          </div>
+          <div class="field-radiobutton col-6">
+            <RadioButton
+              id="eyeColor3"
+              name="eye_color"
+              value="blonde"
+              v-model="item.eye_color"
+            />
+            <label for="category3">Blonde</label>
+          </div>
+          <div class="field-radiobutton col-6">
+            <RadioButton
+              id="eyeColor4"
+              name="eye_color"
+              value="unknown"
+              v-model="item.eye_color"
+            />
+            <label for="category4">Unknown</label>
+          </div>
         </div>
       </div>
-    </div>
-    <template #footer>
-      <Button
-        label="Cancel"
-        icon="pi pi-times"
-        class="p-button-text"
-        @click="hideDialog"
-      />
-      <Button
-        label="Save"
-        icon="pi pi-check"
-        class="p-button-text"
-        @click="saveProduct"
-      />
-    </template>
-  </Dialog>
+      <template #footer>
+        <Button
+          label="Cancel"
+          icon="pi pi-times"
+          class="p-button-text"
+          @click="hideDialog"
+        />
+        <Button
+          label="Save"
+          icon="pi pi-check"
+          class="p-button-text"
+          @click="saveProduct"
+        />
+      </template>
+    </Dialog>
 
-  <!-- Item delete dialog -->
-  <Dialog
-    v-model:visible="deleteProductDialog"
-    :style="{ width: '450px' }"
-    header="Confirm"
-    :modal="true"
-  >
-    <div class="confirmation-content">
-      <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
-      <span v-if="item"
-        >Are you sure you want to delete <b>{{ item.name }}</b
-        >?</span
-      >
-    </div>
-    <template #footer>
-      <Button
-        label="No"
-        icon="pi pi-times"
-        class="p-button-text"
-        @click="deleteProductDialog = false"
-      />
-      <Button
-        label="Yes"
-        icon="pi pi-check"
-        class="p-button-text"
-        @click="deleteProduct"
-      />
-    </template>
-  </Dialog>
+    <!-- Item delete dialog -->
+    <Dialog
+      v-model:visible="deleteProductDialog"
+      :style="{ width: '450px' }"
+      header="Confirm"
+      :modal="true"
+    >
+      <div class="confirmation-content">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
+        <span v-if="item"
+          >Are you sure you want to delete <b>{{ item.name }}</b
+          >?</span
+        >
+      </div>
+      <template #footer>
+        <Button
+          label="No"
+          icon="pi pi-times"
+          class="p-button-text"
+          @click="deleteProductDialog = false"
+        />
+        <Button
+          label="Yes"
+          icon="pi pi-check"
+          class="p-button-text"
+          @click="deleteProduct"
+        />
+      </template>
+    </Dialog>
+  </div>
 </template>
 
 <style lang="scss" scoped>
