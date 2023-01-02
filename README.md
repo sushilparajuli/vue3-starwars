@@ -4,7 +4,7 @@ Star Wars is a Vue3 App that’s consumes an external Star Wars’ API.
 ___
 <br>
 
-### 👉 [Live Preview] 
+### 👉 [Live Preview] https://bn0my3-5173.preview.csb.app/ 
 ____
 ## .env Variables
 
