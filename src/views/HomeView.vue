@@ -4,7 +4,7 @@ import { useFilms } from "@/stores/films";
 import { usePeople } from "@/stores/people";
 import { useVehicles } from "@/stores/vehicles";
 import ProgressBar from "primevue/progressbar";
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref } from "vue";
 import { RouterLink } from "vue-router";
 
 const filmsStore = useFilms();
@@ -27,6 +27,7 @@ const searchParams = async (query: string) => {
   }
 };
 
+// Highlighted text
 const highlightText = (text: string) => {
   return text.replaceAll(
     searchQuery.value,
