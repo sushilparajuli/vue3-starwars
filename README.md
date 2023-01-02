@@ -7,7 +7,6 @@ ___
 ### 👉 [Live Preview] 
 ____
 ## .env Variables
-You need to Marvel Developer Account (https://developer.marvel.com)
 
 VITE_API_URL=https://swapi.dev/api/
 ____
