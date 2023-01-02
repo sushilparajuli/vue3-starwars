@@ -50,7 +50,9 @@ onMounted(() => {
       <div v-if="loading">
         <ProgressBar style="height: 0.5em; width: 30rem" mode="indeterminate" />
       </div>
-      <div class="bg-white w-full max-w-30rem absolute">
+      <div
+        class="bg-white w-full max-w-30rem max-h-30rem absolute search-content mb-3"
+      >
         <template v-if="peopleStore.topPeople.length > 0">
           <div class="flex flex-column">
             <div class="bg-blue-900 text-white p-2"><h3>Characters</h3></div>
@@ -117,5 +119,9 @@ a[disabled="disabled"] {
   user-select: none;
   cursor: not-allowed;
   opacity: 0.5;
+}
+.search-content {
+  overflow-x: auto;
+  z-index: 9;
 }
 </style>
