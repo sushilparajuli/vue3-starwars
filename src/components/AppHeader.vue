@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import BrandImage from "@/components/Logos/BrandImage.vue";
+import BrandImage from "@/components/BrandImage.vue";
 </script>
 <template>
   <header class="flex-grow-none bg-blue-100 p-3">
@@ -10,7 +10,7 @@ import BrandImage from "@/components/Logos/BrandImage.vue";
             <BrandImage />
           </RouterLink>
         </div>
-    </div>
+      </div>
     </div>
   </header>
 </template>

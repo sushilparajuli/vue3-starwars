@@ -1,20 +1,87 @@
 <script lang="ts" setup>
-import InputText from "primevue/inputtext";
+import Search from "@/components/SearchInput.vue";
+import { useFilms } from "@/stores/films";
+import { usePeople } from "@/stores/people";
+import { useVehicles } from "@/stores/vehicles";
+import ProgressBar from "primevue/progressbar";
 import { ref } from "vue";
-const search = ref("");
+import { RouterLink } from "vue-router";
+
+const filmsStore = useFilms();
+const peopleStore = usePeople();
+const vehicleStore = useVehicles();
+const loading = ref<Boolean>();
+
+const searchParams = async (query: string) => {
+  loading.value = true;
+  try {
+    await filmsStore.fetchFilmsByQuery(query);
+    await peopleStore.fetchPeopleByQuery(query);
+    await vehicleStore.fetchVehicleByQuery(query);
+  } catch (err) {
+    loading.value = false;
+  } finally {
+    loading.value = false;
+  }
+};
 </script>
 <template>
   <div
-    class="home px-5 flex flex-column h-full container justify-content-center align-items-center"
+    class="home relative px-5 flex flex-column h-full container align-items-center"
   >
-    <div class="p-input-icon-left w-full max-w-30rem">
-      <i class="pi pi-search" />
-      <InputText
-        class="p-inputtext-lg w-full"
-        type="text"
-        v-model="search"
-        placeholder="Search"
-      />
+    <div class="relative mt-8 w-30rem">
+      <Search :loading="loading" @searchInput="searchParams" />
+
+      <div v-if="loading">
+        <ProgressBar style="height: 0.5em; width: 30rem" mode="indeterminate" />
+      </div>
+      <div class="bg-white w-full max-w-30rem absolute">
+        <template v-if="filmsStore.topFilms.length > 0">
+          <div class="flex flex-column">
+            <div class="bg-blue-900 text-white p-2"><h3>Films</h3></div>
+            <div
+              class="p-1"
+              v-for="film of filmsStore.topFilms"
+              :key="film.title"
+            >
+              {{ film.title }}
+            </div>
+            <RouterLink class="pull-right align-self-end p-2" to="/"
+              >View All</RouterLink
+            >
+          </div>
+        </template>
+        <template v-if="peopleStore.topPeople.length > 0">
+          <div class="flex flex-column">
+            <div class="bg-blue-900 text-white p-2"><h3>Characters</h3></div>
+            <div
+              class="p-1"
+              v-for="people of peopleStore.topPeople"
+              :key="people.name"
+            >
+              {{ people.name }}
+            </div>
+            <RouterLink class="pull-right align-self-end p-2" to="/"
+              >View All</RouterLink
+            >
+          </div>
+        </template>
+        <template v-if="vehicleStore.topVehicles.length > 0">
+          <div class="flex flex-column">
+            <div class="bg-blue-900 text-white p-2"><h3>Vehicles</h3></div>
+            <div
+              class="p-1"
+              v-for="vehicle of vehicleStore.topVehicles"
+              :key="vehicle.name"
+            >
+              {{ vehicle.name }}
+            </div>
+            <RouterLink class="pull-right align-self-end p-2" to="/"
+              >View All</RouterLink
+            >
+          </div>
+        </template>
+      </div>
     </div>
   </div>
 </template>

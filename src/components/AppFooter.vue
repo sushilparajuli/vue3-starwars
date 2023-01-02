@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import Social from "@/components/Social/Social.vue";
+import Social from "@/components/SocialLinks.vue";
 </script>
 <template>
   <footer class="footer flex flex-column text-center text-white py-5">
