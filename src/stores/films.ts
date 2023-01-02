@@ -32,7 +32,7 @@ export const useFilms = defineStore("films", {
         this.films = [];
       }
     },
-    async fetchFilms(page: number = 1) {
+    async fetchFilms(page: string = "1") {
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}films/?page=${page}}`
       );

@@ -9,14 +9,14 @@ interface VehiclResponse {
 interface VehiclState {
   vehicles: IVehicle[];
   totalRecord: number;
-  page: string;
+  page: number;
 }
 
 export const useVehicles = defineStore("vehicles", {
   state: (): VehiclState => ({
     vehicles: [],
     totalRecord: 0,
-    page: "1",
+    page: 1,
   }),
   actions: {
     async fetchVehicleByQuery(query?: string, page: number = 1) {
