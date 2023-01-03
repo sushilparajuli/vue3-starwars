@@ -48,8 +48,8 @@ onMounted(() => {
     <div class="relative mt-8 w-10 md:w-30rem">
       <Search :loading="loading" @searchInput="searchParams" />
 
-      <div v-if="loading">
-        <ProgressBar style="height: 0.5em; width: 30rem" mode="indeterminate" />
+      <div class="w-100" v-if="loading">
+        <ProgressBar style="height: 0.5em" mode="indeterminate" />
       </div>
       <div
         class="bg-white w-full max-w-30rem max-h-30rem absolute search-content mb-3"
