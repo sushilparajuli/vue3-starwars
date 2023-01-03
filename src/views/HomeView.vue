@@ -45,7 +45,7 @@ onMounted(() => {
   <div
     class="home relative px-5 flex flex-column h-full container align-items-center"
   >
-    <div class="relative mt-8 w-30rem">
+    <div class="relative mt-8 w-10 md:w-30rem">
       <Search :loading="loading" @searchInput="searchParams" />
 
       <div v-if="loading">

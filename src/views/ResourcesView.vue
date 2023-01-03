@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import InputText from "primevue/inputtext";
+import InputNumber from "primevue/inputnumber";
 import Dialog from "primevue/dialog";
 import Dropdown from "primevue/dropdown";
 import RadioButton from "primevue/radiobutton";
@@ -10,6 +11,8 @@ import Button from "primevue/button";
 import { useToast } from "primevue/usetoast";
 import { useRoute } from "vue-router";
 import { usePeople } from "@/stores/people";
+import MaleIcon from "@/components/MaleIcon.vue";
+import FemaleIcon from "@/components/FemaleIcon.vue";
 
 // route from vue-router
 const route = useRoute();
@@ -53,9 +56,13 @@ const onSort = (event: Event) => {
       return peopleStore.people?.sort((a, b) =>
         a.name > b.name ? sortOrder : -sortOrder
       );
-    case "skin_color":
+    case "height":
       return peopleStore.people?.sort((a, b) =>
-        a.skin_color > b.skin_color ? sortOrder : -sortOrder
+        a.height > b.height ? sortOrder : -sortOrder
+      );
+    case "mass":
+      return peopleStore.people?.sort((a, b) =>
+        a.mass > b.mass ? sortOrder : -sortOrder
       );
     case "gender":
       return peopleStore.people?.sort((a, b) =>
@@ -138,7 +145,7 @@ const deleteProduct = () => {
   });
 };
 
-const filterKeys: string[] = ["name", "eye_color", "gender", "skin_color"];
+const filterKeys: string[] = ["name", "eye_color", "gender", "height", "mass"];
 
 // fetching data
 onMounted(async () => {
@@ -152,6 +159,7 @@ onMounted(async () => {
     <div class="container pt-4">
       <h1 class="text-white uppercase mb-2">{{ title }}s</h1>
       <DataTable
+        stripedRows
         :value="peopleStore.people"
         :lazy="true"
         :paginator="true"
@@ -189,16 +197,45 @@ onMounted(async () => {
           filterMatchMode="contains"
           ref="gender"
           :sortable="true"
+          class="genderColumn"
         >
+          <template #body="slotProps">
+            <template v-if="slotProps.data.gender === 'male'">
+              <MaleIcon />
+            </template>
+            <template v-else-if="slotProps.data.gender === 'female'">
+              <FemaleIcon />
+            </template>
+            <template v-else> <span> - </span> </template>
+          </template>
         </Column>
         <Column
           field="skin_color"
           header="Skin Color"
           filterField="skin_color"
           ref="skin_color"
-          :sortable="true"
         >
         </Column>
+        <Column
+          field="birth_year"
+          header="Birth Year"
+          filterField="birth_year"
+          ref="birth_year"
+        />
+        <Column
+          field="height"
+          header="Height"
+          filterField="height"
+          ref="height"
+          :sortable="true"
+        />
+        <Column
+          field="mass"
+          header="Mass"
+          filterField="mass"
+          ref="mass"
+          :sortable="true"
+        />
         <Column header="Actions" :exportable="false" style="min-width: 8rem">
           <template #body="slotProps">
             <Button
@@ -239,9 +276,10 @@ onMounted(async () => {
       </div>
 
       <div class="field">
-        <label for="inventoryStatus" class="mb-3">Gender</label>
+        <label for="gender" class="mb-3">Gender</label>
         <Dropdown
-          id="inventoryStatus"
+          id="gender"
+          inputId="gender"
           v-model="item.gender"
           :options="genderList"
           optionLabel="label"
@@ -249,15 +287,10 @@ onMounted(async () => {
         >
           <template #value="slotProps">
             <div v-if="slotProps.value && slotProps.value.value">
-              <span :class="'product-badge status-' + slotProps.value.value">{{
-                slotProps.value.label
-              }}</span>
+              <span>{{ slotProps.value.label }}</span>
             </div>
             <div v-else-if="slotProps.value && !slotProps.value.value">
-              <span
-                :class="'product-badge status-' + slotProps.value.toLowerCase()"
-                >{{ slotProps.value }}</span
-              >
+              <span>{{ slotProps.value }}</span>
             </div>
             <span v-else>
               {{ slotProps.placeholder }}
@@ -305,6 +338,16 @@ onMounted(async () => {
             />
             <label for="category4">Unknown</label>
           </div>
+        </div>
+      </div>
+      <div class="formgrid grid">
+        <div class="field col">
+          <label for="height">Height</label>
+          <InputNumber inputId="height" v-model="item.height" />
+        </div>
+        <div class="field col">
+          <label for="mass">Mass</label>
+          <InputNumber inputId="mass" v-model="item.mass" />
         </div>
       </div>
       <template #footer>
@@ -357,7 +400,17 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 ::v-deep(.p-datatable .p-datatable-tbody > tr > td) {
-  padding: 0.5rem;
+  padding: 0.3rem 1rem;
+}
+.genderColumn {
+  svg {
+    max-height: 1.5rem;
+  }
+}
+::v-deep(
+    .p-datatable.p-datatable-striped .p-datatable-tbody > tr:nth-child(even)
+  ) {
+  background: var(--blue-50);
 }
 .table-header {
   display: flex;
